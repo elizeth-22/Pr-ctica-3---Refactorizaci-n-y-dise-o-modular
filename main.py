@@ -21,6 +21,17 @@ class ArchivoTexto(Archivo):
     def __init__(self, nombre, tamanio):
         super().__init__(nombre, tamanio)
 
+class CreadorArchivo:
+    def crear_archivo(self, nombre, tamanio):
+        pass
+
+class CreadorPDF(CreadorArchivo):
+    def crear_archivo(self, nombre, tamanio):
+        return ArchivoPDF(nombre, tamanio)
+
+class CreadorTexto(CreadorArchivo):
+    def crear_archivo(self, nombre, tamanio):
+        return ArchivoTexto(nombre, tamanio)
 
 class Carpeta(Elemento):
     def __init__(self, nombre):
@@ -42,30 +53,18 @@ class CorreoLegacy:
         print(body)
 
 
-def agregar_archivo(carpeta, tipo, nombre, tamanio):
-    if tipo == "pdf":
-        carpeta.agregar(ArchivoPDF(nombre, tamanio))
-    elif tipo == "txt":
-        carpeta.agregar(ArchivoTexto(nombre, tamanio))
-
-def obtener_tamanio(carpeta):
-    total = 0
-    for archivo in carpeta.archivos:
-        total += archivo.tamanio
-    for subcarpeta in carpeta.subcarpetas:
-        total += obtener_tamanio(subcarpeta)
-    return total
-
-
 def enviar_resultado(carpeta, destino):
     correo = CorreoLegacy()
     correo.send_email(destino, "Tamanio total: " + str(carpeta.obtener_tamanio()))
 
 
 def main():
+    crear_pdf = CreadorPDF()
+    crear_texto = CreadorTexto()
+
     clase = Carpeta("MyP")
-    agregar_archivo(clase, "pdf", "practica.pdf", 120)
-    agregar_archivo(clase, "txt", "notas.txt", 80)
+    clase.agregar(crear_pdf.crear_archivo("practica.pdf", 120))
+    clase.agregar(crear_texto.crear_archivo("notas.txt", 80))
 
     ejemplos = Carpeta("Ejemplos")
     agregar_archivo(ejemplos, "txt", "ejemplo.txt", 50)
