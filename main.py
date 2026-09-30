@@ -1,14 +1,15 @@
-"""Codigo inicial de la practica 3: aun NO esta refactorizado.
+#Codigo de la practica 3: se esta refactorizando jeje
 
-El equipo debe separar responsabilidades, identificar oportunidades de
-Composite / Factory Method / Adapter y comprobar que conserva la salida.
-"""
-
-
-class Archivo:
+class Elemento:
+    def obtener_tamanio(self):
+        pass
+    
+class Archivo(Elemento):
     def __init__(self, nombre, tamanio):
         self.nombre = nombre
         self.tamanio = tamanio
+    def obtener_tamanio(self):
+        return self.tamanio
 
 
 class ArchivoPDF(Archivo):
@@ -21,11 +22,18 @@ class ArchivoTexto(Archivo):
         super().__init__(nombre, tamanio)
 
 
-class Carpeta:
+class Carpeta(Elemento):
     def __init__(self, nombre):
         self.nombre = nombre
-        self.archivos = []
-        self.subcarpetas = []
+        self.elementos = []
+    def obtener_tamanio(self):
+        total = 0
+        for elemento in self.elementos:
+            total += elemento.obtener_tamanio()
+        return total
+    def agregar(self, elemento):
+        self.elementos.append(elemento)
+        
 
 
 class CorreoLegacy:
@@ -36,10 +44,9 @@ class CorreoLegacy:
 
 def agregar_archivo(carpeta, tipo, nombre, tamanio):
     if tipo == "pdf":
-        carpeta.archivos.append(ArchivoPDF(nombre, tamanio))
+        carpeta.agregar(ArchivoPDF(nombre, tamanio))
     elif tipo == "txt":
-        carpeta.archivos.append(ArchivoTexto(nombre, tamanio))
-
+        carpeta.agregar(ArchivoTexto(nombre, tamanio))
 
 def obtener_tamanio(carpeta):
     total = 0
@@ -52,7 +59,7 @@ def obtener_tamanio(carpeta):
 
 def enviar_resultado(carpeta, destino):
     correo = CorreoLegacy()
-    correo.send_email(destino, "Tamanio total: " + str(obtener_tamanio(carpeta)))
+    correo.send_email(destino, "Tamanio total: " + str(carpeta.obtener_tamanio()))
 
 
 def main():
@@ -62,9 +69,9 @@ def main():
 
     ejemplos = Carpeta("Ejemplos")
     agregar_archivo(ejemplos, "txt", "ejemplo.txt", 50)
-    clase.subcarpetas.append(ejemplos)
+    clase.agregar(ejemplos)
 
-    print(obtener_tamanio(clase))
+    print(clase.obtener_tamanio())
     enviar_resultado(clase, "profesor@universidad.edu")
 
 
