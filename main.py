@@ -67,7 +67,7 @@ def main():
     clase.agregar(crear_texto.crear_archivo("notas.txt", 80))
 
     ejemplos = Carpeta("Ejemplos")
-    agregar_archivo(ejemplos, "txt", "ejemplo.txt", 50)
+    ejemplos.agregar(crear_texto.crear_archivo("ejemplo.txt", 50))
     clase.agregar(ejemplos)
 
     print(clase.obtener_tamanio())
