@@ -44,7 +44,7 @@ class Carpeta(Elemento):
         return total
     def agregar(self, elemento):
         self.elementos.append(elemento)
-        
+
 
 
 class CorreoLegacy:
@@ -52,10 +52,20 @@ class CorreoLegacy:
         print("Para: " + to)
         print(body)
 
+# Adapter{
+class Notificador:
+    def enviar(self, destino, mensaje):
+        pass # *aquí no hago nada, pero sintácticamente necesito algo...
 
-def enviar_resultado(carpeta, destino):
-    correo = CorreoLegacy()
-    correo.send_email(destino, "Tamanio total: " + str(carpeta.obtener_tamanio()))
+class AdaptadorCorreo(Notificador):
+    def __init__(self, correo):
+        self.correo = correo
+    def enviar(self, destino, mensaje):
+        self.correo.send_email(destino, mensaje)
+#}
+#Modifiacion de Adapter a este metodo
+def enviar_resultado(carpeta, destino, notificador):
+    notificador.enviar(destino, "Tamanio total: " + str(carpeta.obtener_tamanio()))
 
 
 def main():
@@ -71,7 +81,9 @@ def main():
     clase.agregar(ejemplos)
 
     print(clase.obtener_tamanio())
-    enviar_resultado(clase, "profesor@universidad.edu")
+
+    adaptador = AdaptadorCorreo(CorreoLegacy())
+    enviar_resultado(clase, "profesor@universidad.edu", adaptador)
 
 
 if __name__ == "__main__":

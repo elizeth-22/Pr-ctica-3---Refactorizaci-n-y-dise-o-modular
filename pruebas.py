@@ -1,10 +1,19 @@
-from main import Carpeta, agregar_archivo
+from main import Carpeta, CreadorPDF, CreadorTexto
 
 def comprobar(nombre, esperado, obtenido):
     if esperado == obtenido:
         print("OK: " + nombre)
     else:
         print("FALLO: " + nombre + " | esperado =" + str(esperado) + " | obtenido =" + str(obtenido))
+
+_pdf = CreadorPDF()
+_txt = CreadorTexto()
+
+def agregar_archivo(carpeta, tipo, nombre, tamanio):
+    if tipo == "pdf":
+        carpeta.agregar(_pdf.crear_archivo(nombre, tamanio))
+    elif tipo == "txt":
+        carpeta.agregar(_txt.crear_archivo(nombre, tamanio))
 
 # Caso 1: carpeta vacia
 vacia = Carpeta("Vacia")
