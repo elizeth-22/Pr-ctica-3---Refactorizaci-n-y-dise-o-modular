@@ -1,4 +1,4 @@
-#Codigo de la practica 3: se esta refactorizando jeje
+#Codigo de la practica 3: ya está refacorizado yei :b
 
 class Elemento:
     def obtener_tamanio(self):
@@ -55,7 +55,7 @@ class CorreoLegacy:
 # Adapter{
 class Notificador:
     def enviar(self, destino, mensaje):
-        pass # *aquí no hago nada, pero sintácticamente necesito algo...
+        pass 
 
 class AdaptadorCorreo(Notificador):
     def __init__(self, correo):
